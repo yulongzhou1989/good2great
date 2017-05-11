@@ -6,6 +6,7 @@ use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Mvc\Dispatcher;
 
 
 // Register an autoloader
@@ -64,7 +65,6 @@ $di->set(
 );
 
 
-
 $application = new Application($di);
 
 try {
@@ -75,3 +75,18 @@ try {
 } catch (\Exception $e) {
     echo "Exception: ", $e->getMessage();
 }
+
+
+/**
+ * MVC dispatcher
+ */
+$di->set(
+    "dispatcher",
+    function () {
+        // ...
+
+        $dispatcher = new Dispatcher();
+
+        return $dispatcher;
+    }
+);
