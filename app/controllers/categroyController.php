@@ -12,13 +12,19 @@ class CategoryController extends ControllerBase
         // ...
         $categoryID = $request->get("id");
         //get data from db
-        $query = "SELECT * FROM contents";
-        $contentsList = $this->modelsManager->executeQuery(
-            "SELECT * FROM contents WHERE id = :id:",
-            [
-                "id" => $categoryID,
-            ]
+        // $contentsList = $this->modelsManager->executeQuery(
+        //     "SELECT * FROM contents WHERE id = :id:",
+        //     [
+        //         "id" => $categoryID,
+        //     ]
+        // );
+        $contentList = array(
+          array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
+          array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
+          array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
+          array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01")
         );
+
         //render
         $paginator = new Paginator(array(
             "data"  => $contentList,
