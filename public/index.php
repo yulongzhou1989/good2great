@@ -1,92 +1,99 @@
 <?php
-
 use Phalcon\Loader;
 use Phalcon\Mvc\View;
 use Phalcon\Mvc\Application;
 use Phalcon\Di\FactoryDefault;
 use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
-use Phalcon\Mvc\Dispatcher;
+use Phalcon\Config\Adapter\Ini as ConfigIni;
+use Phalcon\Session\Adapter\Files as Session;
 
+// ...
 
-// Register an autoloader
-$loader = new Loader();
+// Read the configuration
+$config = new ConfigIni(
+    APP_PATH . "app/config/config.ini"
+);
 
+/**
+ * Auto-loader configuration
+ */
+require APP_PATH . "app/config/loader.php";
+
+$loader = new Phalcon\Loader();
+
+// We're a registering a set of directories taken from the configuration file
 $loader->registerDirs(
     [
-        "../app/controllers/",
-        "../app/models/",
+        APP_PATH . $config->application->controllersDir,
+        APP_PATH . $config->application->pluginsDir,
+        APP_PATH . $config->application->libraryDir,
+        APP_PATH . $config->application->modelsDir,
+        APP_PATH . $config->application->formsDir,
     ]
 );
 
 $loader->register();
+// ...
 
+define(
+    "APP_PATH",
+    realpath("..") . "/"
+);
 
+/**
+ * Load application services
+ */
+require APP_PATH . "app/config/services.php";
 
 // Create a DI
 $di = new FactoryDefault();
 
-// Setup the view component
-$di->set(
-    "view",
-    function () {
-        $view = new View();
-
-        $view->setViewsDir("../app/views/");
-
-        return $view;
-    }
-);
-
-// Setup a base URI so that all generated URIs include the "tutorial" folder
+/**
+ * The URL component is used to generate all kind of URLs in the application
+ */
 $di->set(
     "url",
-    function () {
+    function () use ($config) {
         $url = new UrlProvider();
 
-        $url->setBaseUri("/good2great/");
+        $url->setBaseUri(
+            $config->application->baseUri
+        );
 
         return $url;
     }
 );
 
+$application = new Application($di);
+
+$response = $application->handle();
+
+$response->send();
+
+// Start the session the first time a component requests the session service
 $di->set(
-    "db",
-    function(){
-      return new DbAdapter(
-          [
-              "host"     => "localhost",
-              "username" => "root",
-              "password" => "secret",
-              "dbname"   => "test_db",
-          ]
-        );
+    "session",
+    function () {
+        $session = new Session();
+
+        $session->start();
+
+        return $session;
     }
 );
 
-
-$application = new Application($di);
-
-try {
-    // Handle the request
-    $response = $application->handle();
-
-    $response->send();
-} catch (\Exception $e) {
-    echo "Exception: ", $e->getMessage();
-}
-
-
-/**
- * MVC dispatcher
- */
+// Database connection is created based on parameters defined in the configuration file
 $di->set(
-    "dispatcher",
-    function () {
-        // ...
-
-        $dispatcher = new Dispatcher();
-
-        return $dispatcher;
+    "db",
+    function () use ($config) {
+        return new DbAdapter(
+            [
+                "host"     => $config->database->host,
+                "username" => $config->database->username,
+                "password" => $config->database->password,
+                "dbname"   => $config->database->name,
+            ]
+        );
     }
 );
