@@ -4,6 +4,7 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Paginator\Pager;
 
 class CategoryController extends Controller
 {
@@ -33,7 +34,7 @@ class CategoryController extends Controller
             "limit" => 10,
             "page"  => $numberPage
         ));
-        
+
         $this->view->page = $paginator->getPaginate();
         $this->view->contentList = $contentList;
     }

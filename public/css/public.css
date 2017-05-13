@@ -10,3 +10,13 @@
 .paddingUp{
   padding-top: 30px;
 }
+
+.pagination >li{
+  display: inline;
+}
+
+.pagination-input {
+  float:left;
+  width:52px;
+  border-radius:0;
+}
