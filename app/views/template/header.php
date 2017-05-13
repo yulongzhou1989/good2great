@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
+
     <title>step by step</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="public/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <!-- Theme CSS -->
     <link href="public/css/freelancer.min.css" rel="stylesheet">
-    <link href="public/css/public.css" rel="stylesheet" type="text/css">
 
     <!-- Custom Fonts -->
     <link href="public/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -25,4 +25,5 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+
 </head>

@@ -12,5 +12,8 @@ $loader->registerDirs(
     ]
 );
 
+// $loader->registerClasses([
+//     'Services' => APP_PATH . 'app/Services.php'
+// ]);
 
 $loader->register();

@@ -8,14 +8,11 @@ use Phalcon\Config\Adapter\Ini as ConfigIni;
 use Phalcon\Session\Adapter\Files as Session;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 
-define(
-    "APP_PATH",
-    realpath("..") . "/"
-);
+define('APP_PATH', realpath('..') . '/');
+
 // Read the configuration
-$config = new ConfigIni(
-    APP_PATH . "app/config/config.ini"
-);
+$config = new ConfigIni(APP_PATH . 'app/config/config.ini');
+
 /**
  * Auto-loader configuration
  */
@@ -61,6 +58,14 @@ $di->set(
         );
     }
 );
+
+$di->set(
+    "config",
+    function() use ($config) {
+        return $config;
+    }
+);
+
 $application = new Application($di);
 try {
     // Handle the request
