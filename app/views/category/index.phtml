@@ -29,7 +29,6 @@
 
 <body id="page-top" class="index">
   <div id="skipnav"><a href="#maincontent">Skip to main content</a></div>
-
     <!-- Navigation -->
     <nav id="mainNav" class="navbar navbar-default navbar-fixed-top navbar-custom">
         <div class="container">
@@ -66,31 +65,29 @@
       <div class="container">
         <div class="col-lg-8">
           <div class="post-previews">
-
-            <h3><a href="content?id="><?php echo $contentList[1]->title ?></a></h3>
-            <div class="author text-muted">by David Miller</div>
-            <div class="category text-muted"><i class="icon-tag"></i> News</div>
-            <div class="date text-muted"><i class="icon-clock"></i> Aug 10, 2016</div>
+            <? foreach($contentList as $content): ?>
+              <h3><a href="content?id="><? echo $content->title  ?></a></h3>
+              <div class="category text-muted"><i class="icon-tag"></i> News</div>
+              <div class="author text-muted">by <? echo $content->username ?></div>
+              <div class="date text-muted"><i class="icon-clock"></i> <? echo $content->date ?></div>
+            <? endforeach?>
           </div>
           <ul class="pagination">
-          <li class="page-item disabled">
-          <a class="page-link" href="#" disabled="">« Prev</a>
-          </li>
-          <li class="page-item disabled">
-          <a class="page-link" href="#">1</a>
-          </li>
-          <li class="page-item">
-          <a class="page-link" href="/articles/page2/">2</a>
-          </li>
-          <li class="page-item">
-          <a class="page-link" href="/articles/page3/">3</a>
-          </li>
-          <li class="page-item">
-          <a class="page-link" href="/articles/page4/">4</a>
-          </li>
-          <li class="page-item">
-          <a class="page-link" href="/articles/page2/">Next »</a>
-          </li>
+            <li class="page-item <? if($page->current == 1) echo "disable" ?>">
+              <a class="page-link" href="<? if($page->current>1) echo "/category?page=1" ?>" disabled="">« First</a>
+            </li>
+            <li class="page-item <? if($page->current == 1) echo "disable" ?>">
+              <a class="page-link" href="<? if($page->current>1) echo "/category?page=$page->before" ?>" disabled="">« Prev</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="/articles/page2/">Next »</a>
+            </li>
+            <li class="page-item">
+              <a class="page-link" href="/articles/page2/">Last »</a>
+            </li>
+            <li class="page-item">
+              <?php echo $page->current, " / ", $page->total_pages; ?>
+            </li>
           </ul>
         </div>
         <div class="col-lg-4">

@@ -12,31 +12,29 @@ class CategoryController extends Controller
     {
         $request = new Request();
         $categoryID = $request->get("id");
-        $query = $categoryID?"SELECT * FROM contents WHERE id = :id:":"SELECT * FROM contents";
-        //get data from db
-        $contentsList = $this->modelsManager->executeQuery(
-            $query,
+        $numberPage = 1;
+
+        if($categoryID){
+          $contentList = $this->modelsManager->executeQuery(
+            ' SELECT c.id, u.username, c.date, c.title FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE id = :id:',
             [
                 "id" => $categoryID,
             ]
-        );
-        // $contentList = array(
-        //   "1"=>array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
-        //   "2"=>array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
-        //   "3"=>array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01"),
-        //   "4"=>array("id"=>"1","title"=>"babababawbabababababababababababaab","date"=>"2016-01-01")
-        // );
-
+          );
+        } else{
+          $contentList = $this->modelsManager->executeQuery(
+            'SELECT c.id, u.username, c.date, c.title FROM contents c LEFT JOIN users u ON c.userid = u.id'
+          );
+        }
 
         //render
-        // $paginator = new Paginator(array(
-        //     "data"  => $contentList,
-        //     "limit" => 10,
-        //     "page"  => $numberPage
-        // ));
+        $paginator = new Paginator(array(
+            "data"  => $contentList,
+            "limit" => 10,
+            "page"  => $numberPage
+        ));
+        
+        $this->view->page = $paginator->getPaginate();
         $this->view->contentList = $contentList;
-        // $this->view->page = $paginator->getPaginate();
     }
-
-
 }
