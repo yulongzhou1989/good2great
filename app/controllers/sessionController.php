@@ -46,7 +46,7 @@ class SessionController extends ControllerBase
                 // Forward to the 'invoices' controller if the user is valid
                 return $this->dispatcher->forward(
                     [
-                        "controller" => "invoices",
+                        "controller" => "index",
                         "action"     => "index",
                     ]
                 );

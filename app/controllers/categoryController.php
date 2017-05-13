@@ -4,7 +4,6 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Paginator\Pager;
 
 class CategoryController extends Controller
 {
@@ -28,7 +27,7 @@ class CategoryController extends Controller
             [
                 "id" => $categoryID,
                 "limit"=> $limit,
-                "offset"=> $offset
+                "offset"=> $offset,
             ]
           );
         } else{
@@ -47,5 +46,14 @@ class CategoryController extends Controller
         $this->view->page = $paginator->getPaginate();
         $this->view->contentList = $contentList;
         $this->view->config = $this->config;
+    }
+
+    /**
+     * Execute the "search" based on the criteria sent from the "index"
+     * Returning a paginator for the results
+     */
+    public function searchAction()
+    {
+
     }
 }

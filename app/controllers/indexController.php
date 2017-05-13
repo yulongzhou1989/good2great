@@ -5,6 +5,6 @@
   {
     public function indexAction()
     {
-        $this->view->title = "something";
+      
     }
   }

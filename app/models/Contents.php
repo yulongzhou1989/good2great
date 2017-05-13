@@ -17,4 +17,13 @@ class Contents extends Model
     public $updateDate;
 
     public $top;
+
+    /**
+     * This model is mapped to the table sample_cars
+     */
+    public function getSource()
+    {
+        return "contents";
+    }
+
 }
