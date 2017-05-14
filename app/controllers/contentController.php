@@ -2,7 +2,6 @@
 
 use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
-use Phalcon\Mvc\Model\Manager as ModelsManager;
 
 class ContentController extends Controller
 {
@@ -32,9 +31,10 @@ class ContentController extends Controller
         $this->response->redirect('/category');
         $this->view->disable();
       }
-      print_r($content);
+      //print_r($content->getFirst());
+      //print_r($this->modelsManager);
       //render
-      $this->view->content = $content;
+      $this->view->content = $content->getFirst();
   }
 
   /**

@@ -7,6 +7,7 @@ use Phalcon\Mvc\Url as UrlProvider;
 use Phalcon\Config\Adapter\Ini as ConfigIni;
 use Phalcon\Session\Adapter\Files as Session;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
+use Phalcon\Mvc\Model\Manager as ModelsManager;
 
 define('APP_PATH', realpath('..') . '/');
 
@@ -63,6 +64,13 @@ $di->set(
     "config",
     function() use ($config) {
         return $config;
+    }
+);
+
+$di->set(
+    "modelsManager",
+    function() {
+        return new ModelsManager();
     }
 );
 
