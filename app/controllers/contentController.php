@@ -12,18 +12,27 @@ class ContentController extends Controller
       $contentID = $request->get("id");
 
       if($contentID){
+        // $query = $this->modelsManager->createQuery(
+        //   "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
+        //   " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:");
+        // $row = $query->execute(
+        //   [
+        //       "id" => $contentID,
+        //   ]
+        // );
         $content = $this->modelsManager->executeQuery(
-          "SELECT  c.id, u.username, c.title, c.content, c.date, c.updateDate" .
+          "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
           " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
           [
               "id" => $contentID,
           ]
         );
+        echo "I am here";
       } else{
         $this->response->redirect('/category');
         $this->view->disable();
       }
-
+      print_r($content);
       //render
       $this->view->content = $content;
   }

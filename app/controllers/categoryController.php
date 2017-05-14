@@ -22,10 +22,10 @@ class CategoryController extends Controller
         if($categoryID){
           $contentList = $this->modelsManager->executeQuery(
             " SELECT c.id, u.username, c.date, c.title ".
-            " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE id = :id: ".
+            " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE id like :id: ".
             " LIMIT :limit: OFFSET :offset:",
             [
-                "id" => $categoryID,
+                "id" => "%,".$categoryID.",%",
                 "limit"=> $limit,
                 "offset"=> $offset,
             ]

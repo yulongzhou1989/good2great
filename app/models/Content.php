@@ -2,7 +2,7 @@
 
 use Phalcon\Mvc\Model;
 
-class Contents extends Model
+class Content extends Model
 {
     public $id;
 
