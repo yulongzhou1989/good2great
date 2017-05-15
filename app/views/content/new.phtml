@@ -17,6 +17,7 @@
     <!--JQUERY -->
     <script src="../public/lib/jquery/jquery.min.js"></script>
     <script src="../public/lib/ckeditor/ckeditor.js"></script>
+    <script src="../public/lib/bootstrap/js/bootstrap.min.js"></script>
     <link href="../public/lib/ckeditor/plugins/codesnippet/lib/highlight/styles/default.css" rel="stylesheet">
     <script src="../public/lib/ckeditor/plugins/codesnippet/lib/highlight/highlight.pack.js"></script>
     <script src="../public/js/public.js"></script>
@@ -41,67 +42,99 @@
                 </div>
             </div>
         </div>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-9">
-                    <div class="modal-body">
-                        <h2>Question Title</h2>
-                        <hr class="star-primary">
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-              <div class="col-lg-9">
-                  <div class="modal-body">
-                    <form>
-                      <textarea name="editor1" id="editor1" rows="10" cols="80">
-                          This is my textarea to be replaced with CKEditor.
-                      </textarea>
-                      <script>
-                          // Replace the <textarea id="editor1"> with a CKEditor
-                          // instance, using default configuration.
-                          CKEDITOR.replace( 'editor1' );
-                      </script>
-                  </form>
+        <form id="content-form" method="post" action="new" role="form">
+        <div class="container controls">
+              <div class="row">
+                  <div class="col-lg-9">
+                      <div class="modal-body">
+                          <h2>New question</h2>
+                          <hr class="star-primary">
+                      </div>
                   </div>
               </div>
-              <div class="col-lg-3">
-                <div class="input-group">
-                    <input type="text" class="form-control">
-                    <span class="input-group-btn">
-                        <button class="btn btn-default" type="button">
-                            <span class="glyphicon glyphicon-search"></span>
-                    </button>
-                    </span>
+              <div class="row">
+                  <div class="col-lg-1">
+                    <label>Title*</label>
+                  </div>
+                  <div class="col-lg-6">
+                      <div class="form-group">
+                          <input id="form_name" type="text" name="title" class="form-control" placeholder="Please enter your title *" required="required" data-error="Firstname is required.">
+                          <div class="help-block with-errors"></div>
+                      </div>
+                  </div>
+                  <div class="col-lg-1">
+                      <div class="dropdown form-group">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">category
+                        <span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                          <li><a href="#">HTML</a></li>
+                          <li><a href="#">CSS</a></li>
+                          <li><a href="#">JavaScript</a></li>
+                        </ul>
+                      </div>
+                  </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-1">
+                  <label>category*</label>
                 </div>
-                <div class="paddingUp">
-                  <ul class="list-group">
-                      <li class="list-group-item justify-content-between">
-                        <strong><a href="http://startbootstrap.com">DP</a>
-                        </strong>
-                        <span class="badge badge-default badge-pill">14</span>
-                      </li>
-                      <li class="list-group-item justify-content-between">
-                        <strong><a href="http://startbootstrap.com">DFS</a>
-                        </strong>
-                        <span class="badge badge-default badge-pill">2</span>
-                      </li>
-                      <li class="list-group-item justify-content-between">
-                        <strong><a href="http://startbootstrap.com">BFS</a>
-                        </strong>
-                        <span class="badge badge-default badge-pill">1</span>
-                      </li>
-                  </ul>
+                <div class="form-group col-lg-6">
+                    <input id="form_name" type="text" name="title" class="form-control" placeholder="Please enter your category *" required="required" data-error="Firstname is required.">
+                    <div class="help-block with-errors"></div>
                 </div>
               </div>
-        </div>
-        <div class="row">
-          <div class="col-lg-9">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; SAVE &nbsp;</button>
-            <button type="button" id="contentCloseButton" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+              <div class="row">
+                <div class="col-lg-9">
+                    <div class="form-group">
+                      <form>
+                        <textarea name="content" id="editor1" rows="10" cols="80">
+                        </textarea>
+                        <script>
+                            // Replace the <textarea id="editor1"> with a CKEditor
+                            // instance, using default configuration.
+                            CKEDITOR.replace( 'editor1' );
+                        </script>
+                    </form>
+                    </div>
+                </div>
+                <div class="col-lg-3">
+                  <div class="input-group">
+                      <input type="text" class="form-control">
+                      <span class="input-group-btn">
+                          <button class="btn btn-default" type="button">
+                              <span class="glyphicon glyphicon-search"></span>
+                      </button>
+                      </span>
+                  </div>
+                  <div class="paddingUp">
+                    <ul class="list-group">
+                        <li class="list-group-item justify-content-between">
+                          <strong><a href="http://startbootstrap.com">DP</a>
+                          </strong>
+                          <span class="badge badge-default badge-pill">14</span>
+                        </li>
+                        <li class="list-group-item justify-content-between">
+                          <strong><a href="http://startbootstrap.com">DFS</a>
+                          </strong>
+                          <span class="badge badge-default badge-pill">2</span>
+                        </li>
+                        <li class="list-group-item justify-content-between">
+                          <strong><a href="http://startbootstrap.com">BFS</a>
+                          </strong>
+                          <span class="badge badge-default badge-pill">1</span>
+                        </li>
+                    </ul>
+                  </div>
+                </div>
           </div>
-        </div>
+          <div class="row">
+            <div class="col-lg-9">
+              <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; SAVE &nbsp;</button>
+              <button type="button" id="contentCloseButton" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
+            </div>
+          </div>
     </div>
+    </form>
 </div>
 <body>
 </html>

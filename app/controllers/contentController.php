@@ -1,24 +1,12 @@
 <?php
-
 use Phalcon\Mvc\Controller;
-use Phalcon\Http\Request;
 
 class ContentController extends Controller
 {
   public function indexAction()
   {
-      $request = new Request();
-      $contentID = $request->get("id");
-
+      $contentID = $this->request->get("id");
       if($contentID){
-        // $query = $this->modelsManager->createQuery(
-        //   "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
-        //   " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:");
-        // $row = $query->execute(
-        //   [
-        //       "id" => $contentID,
-        //   ]
-        // );
         $content = $this->modelsManager->executeQuery(
           "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
           " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
@@ -26,13 +14,10 @@ class ContentController extends Controller
               "id" => $contentID,
           ]
         );
-        echo "I am here";
       } else{
-        $this->response->redirect('/category');
-        $this->view->disable();
+        header("Location: category");
+        exit();
       }
-      //print_r($content->getFirst());
-      //print_r($this->modelsManager);
       //render
       $this->view->content = $content->getFirst();
   }
