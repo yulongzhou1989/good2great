@@ -2,15 +2,13 @@
 
 class SessionController extends ControllerBase
 {
-    // ...
-
     private function _registerSession($user)
     {
         $this->session->set(
-            "auth",
+            "User",
             [
-                "id"   => $user->id,
-                "name" => $user->name,
+                "userid"   => $user->id,
+                "username" => $user->username,
             ]
         );
     }
@@ -18,51 +16,33 @@ class SessionController extends ControllerBase
     /**
      * This action authenticate and logs a user into the application
      */
-    public function startAction()
+    public function loginAction()
     {
         if ($this->request->isPost()) {
             // Get the data from the user
-            $userName = $this->request->getPost("userName");
+            $userName = $this->request->getPost("username");
             $password = $this->request->getPost("password");
 
             // Find the user in the database
-            $user = Users::findFirst(
-                [
-                    "(email = :email: OR username = :email:) AND password = :password: AND active = 'Y'",
-                    "bind" => [
-                        "email"    => $email,
-                        "password" => sha1($password),
-                    ]
-                ]
-            );
+            $user = Users::findFirstById();
 
             if ($user !== false) {
-                $this->_registerSession($user);
-
-                $this->flash->success(
-                    "Welcome " . $user->name
-                );
-
-                // Forward to the 'invoices' controller if the user is valid
-                return $this->dispatcher->forward(
-                    [
-                        "controller" => "index",
-                        "action"     => "index",
-                    ]
-                );
+              if ($this->security->checkHash($password, $user->password)) {
+                  // The password is valid
+                  $this->_registerSession($user);
+                  $this->flash->success(
+                      "Welcome " . $user->name
+                  );
+                  // Forward to the index controller if the user is valid
+                  return $this->dispatcher->forward(
+                      [
+                          "controller" => "index",
+                          "action"     => "index",
+                      ]
+                  );
+                }
             }
-
-            $this->flash->error(
-                "Wrong email/password"
-            );
+            $this->view->message = "login error!";
         }
-
-        // Forward to the login form again
-        return $this->dispatcher->forward(
-            [
-                "controller" => "session",
-                "action"     => "index",
-            ]
-        );
     }
 }

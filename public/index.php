@@ -8,6 +8,8 @@ use Phalcon\Config\Adapter\Ini as ConfigIni;
 use Phalcon\Session\Adapter\Files as Session;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Phalcon\Session\Adapter\Files as Session;
+
 
 define('APP_PATH', realpath('..') . '/');
 
@@ -71,6 +73,17 @@ $di->set(
     "modelsManager",
     function() {
         return new ModelsManager();
+    }
+);
+
+$di->setShared(
+    "session",
+    function () {
+        $session = new Session();
+
+        $session->start();
+
+        return $session;
     }
 );
 

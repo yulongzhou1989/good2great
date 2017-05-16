@@ -3,6 +3,17 @@ use Phalcon\Mvc\Controller;
 
 class ContentController extends Controller
 {
+
+  protected function checkSession(){
+
+      if ($this->session->has("userid")) {
+          // Retrieve its value
+          return $userID = $this->session->get("userid");
+      } else {
+          //redirect to category
+      }
+  }
+
   public function indexAction()
   {
       $contentID = $this->request->get("id");
@@ -43,7 +54,20 @@ class ContentController extends Controller
     */
    public function createAction()
    {
-       // ...
+       $userID = checkSession();
+       $content = new Content();
+       $content->userid = $userID ;
+       $content->title = $this->request->getPost("title");
+       $content->category = $this->request->getPost("category");
+       $content->date = date("Y-m-d h:i:sa");
+       $content->updateDate = date("Y-m-d h:i:sa");
+       $content->content = $this->request->getPost("content");
+
+       if ($content->create() === false) {
+         echo "error";
+       } else {
+         echo "success";
+       }
    }
 
    /**
@@ -51,7 +75,21 @@ class ContentController extends Controller
     */
    public function saveAction()
    {
-       // ...
+       $userID = checkSession();
+       $content = new Content();
+       $content->id = $this->request->getPost("contentID");
+       $content->userid = $userID;
+       $content->title = $this->request->getPost("title");
+       $content->category = $this->request->getPost("category");
+       $content->date = date("Y-m-d h:i:sa");
+       $content->updateDate = date("Y-m-d h:i:sa");
+       $content->content = $this->request->getPost("content");
+
+       if ($content->update() === false) {
+         echo "error";
+       } else {
+         echo "success";
+       }
    }
 
    /**

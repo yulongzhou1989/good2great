@@ -18,6 +18,8 @@ class Contents extends Model
 
     public $top;
 
+    public $category;
+
     /**
      * This model is mapped to the table sample_cars
      */
