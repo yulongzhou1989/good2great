@@ -46,6 +46,19 @@ class CategoryController extends Controller
           );
         }
 
+        //get category list
+        $catList = $this->modelsManager->executeQuery(
+          " SELECT c.categoryName, c.categoryID, count(c.contentID) ".
+          " FROM content_cat c GROUP BY c.categoryName"
+        );
+
+        //get category tags html
+        $viewList = $contentList->toArray();
+        for ($x = 0; $x <count($viewList); $x++){
+          $cat =$viewList[$x]["category"];
+          $viewList[$x]["catHtml"] = $this->_getCategoryHtml($cat);
+        }
+
         //render
         $paginator = new Paginator(array(
             "data"  => $contentList,
@@ -53,15 +66,10 @@ class CategoryController extends Controller
             "page"  => $numberPage
         ));
 
-        $viewList = $contentList->toArray();
-        for ($x = 0; $x <count($viewList); $x++){
-          $cat =$viewList[$x]["category"];
-          $viewList[$x]["catHtml"] = $this->_getCategoryHtml($cat);
-        }
-
         $this->view->page = $paginator->getPaginate();
         $this->view->contentList = $viewList;
         $this->view->config = $this->config;
+        $this->view->catList = $catList;
     }
 
     /**

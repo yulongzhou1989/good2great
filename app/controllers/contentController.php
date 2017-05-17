@@ -6,10 +6,9 @@ class ContentController extends Controller
 {
 
   protected function _getCategoryHtml($category){
-    $arr = explode(",", $category);
     $html = "";
-    foreach($arr as $c){
-      $html .=  "<strong><a href='categroy/search?cat=". $c ."'>" . $c . "</a></strong>,";
+    foreach($category as $c){
+      $html .=  "<strong><a href='categroy/search?cat=". $c["categoryName"] ."'>" . $c["categoryName"] . "</a></strong>,";
     }
     return substr($html, 0, -1);
   }
@@ -38,13 +37,23 @@ class ContentController extends Controller
               "id" => $contentID,
           ]
         );
+
+        $category = $this->modelsManager->executeQuery(
+          "SELECT c.categoryID, c.categoryTitle, c.contentID" .
+          " FROM content_cat c WHERE c.contentID = :id:",
+          [
+              "id" => $contentID,
+          ]
+        );
       } else{
         header("Location: category");
         exit();
       }
+
+      $catList = $category->toArray();
       //render
       $this->view->content = $content->getFirst();
-      $this->view->catHtml = $this->_getCategoryHtml($content->getFirst()->category);
+      $this->view->catHtml = $this->_getCategoryHtml($catList);
   }
 
   /**
@@ -52,7 +61,7 @@ class ContentController extends Controller
     */
    public function newAction()
    {
-       // ...
+
    }
 
    /**
@@ -83,20 +92,49 @@ class ContentController extends Controller
     */
    public function createAction()
    {
-       $userID = checkSession();
+       //$userID = $this->checkSession();
        $content = new Content();
+       $cats = $this->request->getPost("category");
        $content->userid = $userID ;
        $content->title = $this->request->getPost("title");
-       $content->category = $this->request->getPost("category");
+       $content->category = $cats;
        $content->date = date("Y-m-d h:i:sa");
        $content->updateDate = date("Y-m-d h:i:sa");
        $content->content = $this->request->getPost("content");
 
-       if ($content->create() === false) {
-         echo "error";
+       if ($content->save() === false) {
+           echo "error";
+           return ;
        } else {
-         echo "success";
+          $this->_cont_catInsert($content->id, $cats);
        }
+
+       $this->view->Message="success";
+   }
+
+   protected function _cont_catInsert($contentID, $cats){
+         $insertCont_cat = "INSERT INTO content_cat (contentID, categoryName) VALUES ";
+         $catArr = explode("," , $cats);
+         $insertValues = array();
+         for($x=0;$x<2*count($catArr);$x=$x+2){
+           $insertCont_cat .= "(?" . $x . ",?" . $x+1 ." ),"
+           array_push($insertValues, $contentID);
+           array_push($insertValues, $catArr[$x]);
+           array_push($insertValues, $contentID);
+           array_push($insertValues, $catArr[$x+1]);
+         }
+
+         $this->modelsManager->executeQuery(
+            $insertCont_cat,
+            $insertValues
+         );
+   }
+
+   protected function _cont_catDeleteByContentID($contentID){
+        $this->modelsManager->executeQuery(
+            "DELETE FROM content_cat WHERE contentID = :contentID:",
+            "contentID" => $contentID
+        );
    }
 
    /**
@@ -106,18 +144,22 @@ class ContentController extends Controller
    {
        $userID = checkSession();
        $content = new Content();
+       $cats = $this->request->getPost("category");
        $content->id = $this->request->getPost("contentID");
        $content->userid = $userID;
        $content->title = $this->request->getPost("title");
-       $content->category = $this->request->getPost("category");
+       $content->category = $cats;
        $content->updateDate = date("Y-m-d h:i:sa");
        $content->content = $this->request->getPost("content");
 
        if ($content->update() === false) {
          echo "error";
        } else {
-         echo "success";
+         $this->_cont_catDeleteByContentID($contentID);
+         $this->_cont_catInsert($contentID, $cats);
        }
+
+       $this->view->Message="success";
    }
 
    /**
