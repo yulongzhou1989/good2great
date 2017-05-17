@@ -71,13 +71,4 @@ class CategoryController extends Controller
         $this->view->config = $this->config;
         $this->view->catList = $catList;
     }
-
-    /**
-     * Execute the "search" based on the criteria sent from the "index"
-     * Returning a paginator for the results
-     */
-    public function searchAction()
-    {
-
-    }
 }

@@ -65,9 +65,9 @@
                       <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">category
                       <span class="caret"></span></button>
                       <ul class="dropdown-menu">
-                        <li><a href="#">HTML</a></li>
-                        <li><a href="#">CSS</a></li>
-                        <li><a href="#">JavaScript</a></li>
+                        <? foreach($catDropdown as $cat): ?>
+                        <li id="catDropDown_<? echo $cat->categoryName?>" catName="<? echo $cat->categoryName?>" catID="<? $cat->categoryID?>"><a href="#"><? echo $cat->categoryName ?></a></li>
+                        <? endforeach?>
                       </ul>
                     </div>
                 </div>

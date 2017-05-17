@@ -8,7 +8,7 @@ class ContentController extends Controller
   protected function _getCategoryHtml($category){
     $html = "";
     foreach($category as $c){
-      $html .=  "<strong><a href='categroy/search?cat=". $c["categoryName"] ."'>" . $c["categoryName"] . "</a></strong>,";
+      $html .=  "<strong><a href='categroy/index?id=". $c["categoryId"] ."'>" . $c["categoryName"] . "</a></strong>,";
     }
     return substr($html, 0, -1);
   }
@@ -61,7 +61,15 @@ class ContentController extends Controller
     */
    public function newAction()
    {
+     $catDropdown =$this->_getCatDropdown();
+     $this->view->catDropdown = $catDropdown;
+   }
 
+   protected function _getCatDropdown(){
+       $cats = $this->modelsManager->executeQuery(
+         "SELECT id, categoryName FROM category"
+       ) ;
+       return $cats;
    }
 
    /**
@@ -94,10 +102,12 @@ class ContentController extends Controller
    {
        //$userID = $this->checkSession();
        $content = new Content();
-       $cats = $this->request->getPost("category");
+       $catNames = $this->request->getPost("categoryNames");
+       $catIDs = $this->request->getPost("categoryIDs");
        $content->userid = $userID ;
        $content->title = $this->request->getPost("title");
-       $content->category = $cats;
+       $content->category = $catNames;
+       $content->catIDs = $catIDs;
        $content->date = date("Y-m-d h:i:sa");
        $content->updateDate = date("Y-m-d h:i:sa");
        $content->content = $this->request->getPost("content");
@@ -106,22 +116,25 @@ class ContentController extends Controller
            echo "error";
            return ;
        } else {
-          $this->_cont_catInsert($content->id, $cats);
+          $this->_cont_catInsert($content->id, $catNames,$catIDs);
        }
 
        $this->view->Message="success";
    }
 
-   protected function _cont_catInsert($contentID, $cats){
-         $insertCont_cat = "INSERT INTO content_cat (contentID, categoryName) VALUES ";
-         $catArr = explode("," , $cats);
+   protected function _cont_catInsert($contentID, $catNames, $catIDs){
+         $insertCont_cat = "INSERT INTO content_cat (contentID, categoryID, categoryName) VALUES ";
+         $catNameArr = explode("," , $catNames);
+         $catIDs = explode(",", $catIDs);
          $insertValues = array();
-         for($x=0;$x<2*count($catArr);$x=$x+2){
-           $insertCont_cat .= "(?" . $x . ",?" . $x+1 ." ),"
+         for($x=0;$x<3*count($catArr);$x=$x+3){
+           $insertCont_cat .= "(?" . $x . ",?" . $x+1 .",?" . $x+2 . " ),"
            array_push($insertValues, $contentID);
-           array_push($insertValues, $catArr[$x]);
+           array_push($insertValues, $catIDs[$x]);
+           array_push($insertValues, $catNameArr[$x]);
            array_push($insertValues, $contentID);
-           array_push($insertValues, $catArr[$x+1]);
+           array_push($insertValues, $catIDs[$x+1]);
+           array_push($insertValues, $catNameArr[$x+1]);
          }
 
          $this->modelsManager->executeQuery(
