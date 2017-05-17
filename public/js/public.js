@@ -3,11 +3,15 @@ $(function (){
 });
 
 $("#closeContent,#contentCloseButton").on("click", function(event){
-    // event.preventDefault();
-    // history.back(1);
-    window.location.href='list.html';
+    window.location.replace(window.location.protocol + "//" + window.location.host + '/good2great/category');
+});
+
+$("#contentNewButton").on("click", function(event){
+  window.location.href=window.location.protocol + "//" + window.location.host
+  + '/good2great/content/new';
 });
 
 $("#contentEditButton").on("click", function(event){
-    window.location.href='editContent.html';
+    window.location.href=window.location.protocol + "//" + window.location.host
+    + '/good2great/content/edit?id=' + $("#contentID").val();
 });

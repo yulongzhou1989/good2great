@@ -45,17 +45,50 @@
             <div class="row">
                 <div class="col-lg-9">
                     <div class="modal-body">
-                        <h2>Question Title</h2>
+                        <h2>Edit Content</h2>
                         <hr class="star-primary">
                     </div>
                 </div>
             </div>
             <div class="row">
+                <div class="col-lg-1">
+                  <label>Title*</label>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group">
+                        <input id="contentTitle" type="text" name="title" class="form-control" placeholder="Please enter your title *"
+                        required="required" data-error="Firstname is required." value="<? echo $content->content ?>">
+                        <div class="help-block with-errors"></div>
+                    </div>
+                </div>
+                <div class="col-lg-1">
+                    <div class="dropdown form-group">
+                      <button class="btn btn-secondary dropdown-toggle" type="button" data-toggle="dropdown">category
+                      <span class="caret"></span></button>
+                      <ul class="dropdown-menu">
+                        <li><a href="#">HTML</a></li>
+                        <li><a href="#">CSS</a></li>
+                        <li><a href="#">JavaScript</a></li>
+                      </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-1">
+                <label>category*</label>
+              </div>
+              <div class="form-group col-lg-6">
+                  <input id="contentCategory" type="text" name="category" class="form-control" placeholder="Please enter your category *"
+                  required="required" data-error="Firstname is required." value="<? echo $content->category ?>">
+                  <div class="help-block with-errors"></div>
+              </div>
+            </div>
+            <div class="row">
               <div class="col-lg-9">
                   <div class="modal-body">
                     <form>
-                      <textarea name="editor1" id="editor1" rows="10" cols="80">
-                          
+                      <textarea name="content" id="editor1" rows="10" cols="80">
+                          <? echo $content->content ?>
                       </textarea>
                       <script>
                           // Replace the <textarea id="editor1"> with a CKEditor
@@ -97,7 +130,8 @@
         </div>
         <div class="row">
           <div class="col-lg-9">
-            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; SAVE &nbsp;</button>
+            <button type="button" id="contentNewButton" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-plus"></i>&nbsp;&nbsp; New &nbsp;</button>
+            <button type="button" class="btn btn-default" data-dismiss="modal"><i class="glyphicon glyphicon-pencil"></i>&nbsp;&nbsp; Save &nbsp;</button>
             <button type="button" id="contentCloseButton" class="btn btn-default" data-dismiss="modal"><i class="fa fa-times"></i> Close</button>
           </div>
         </div>

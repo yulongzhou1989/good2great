@@ -16,10 +16,11 @@ class ContentController extends Controller
 
   public function indexAction()
   {
+      //checkSession();
       $contentID = $this->request->get("id");
       if($contentID){
         $content = $this->modelsManager->executeQuery(
-          "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
+          "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate, c.category" .
           " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
           [
               "id" => $contentID,
@@ -46,7 +47,22 @@ class ContentController extends Controller
     */
    public function editAction()
    {
-       // ...
+     //checkSession();
+     $contentID = $this->request->get("id");
+     if($contentID){
+       $content = $this->modelsManager->executeQuery(
+         "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate, c.category" .
+         " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
+         [
+             "id" => $contentID,
+         ]
+       );
+     } else{
+       header("Location: category");
+       exit();
+     }
+     //render
+     $this->view->content = $content->getFirst();
    }
 
    /**

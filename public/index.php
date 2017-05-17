@@ -8,7 +8,6 @@ use Phalcon\Config\Adapter\Ini as ConfigIni;
 use Phalcon\Session\Adapter\Files as Session;
 use Phalcon\Db\Adapter\Pdo\Mysql as DbAdapter;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
-use Phalcon\Session\Adapter\Files as Session;
 
 
 define('APP_PATH', realpath('..') . '/');

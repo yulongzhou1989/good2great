@@ -1,6 +1,7 @@
-  <?php
+<?php
+use Phalcon\Mvc\Controller;
 
-class SessionController extends ControllerBase
+class LoginController extends Controller
 {
     private function _registerSession($user)
     {
@@ -11,6 +12,10 @@ class SessionController extends ControllerBase
                 "username" => $user->username,
             ]
         );
+    }
+
+    public function indexAction(){
+
     }
 
     /**
