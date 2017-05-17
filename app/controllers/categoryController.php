@@ -4,9 +4,19 @@ use Phalcon\Mvc\Controller;
 use Phalcon\Http\Request;
 use Phalcon\Paginator\Adapter\Model as Paginator;
 use Phalcon\Mvc\Model\Manager as ModelsManager;
+use Common\Helper as Helper;
 
 class CategoryController extends Controller
 {
+    protected function _getCategoryHtml($category){
+      $arr = explode(",", $category);
+      $html = "";
+      foreach($arr as $c){
+        $html .=  "<strong><a href='categroy/search?cat=". $c ."'>" . $c . "</a></strong>,";
+      }
+      return substr($html, 0, -1);
+    }
+
     public function indexAction()
     {
         $request = new Request();
@@ -18,10 +28,10 @@ class CategoryController extends Controller
 
         $limit = $this->config->pagination->limit;
         $offset = ($numberPage-1)*$limit;
-
+        $contentList;
         if($categoryID){
           $contentList = $this->modelsManager->executeQuery(
-            " SELECT c.id, u.username, c.date, c.title ".
+            " SELECT c.id, u.username, c.date, c.title, c.category ".
             " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE id like :id: ".
             " LIMIT :limit: OFFSET :offset:",
             [
@@ -32,7 +42,7 @@ class CategoryController extends Controller
           );
         } else{
           $contentList = $this->modelsManager->executeQuery(
-            'SELECT c.id, u.username, c.date, c.title FROM contents c LEFT JOIN users u ON c.userid = u.id'
+            'SELECT c.id, u.username, c.date, c.title, c.category FROM contents c LEFT JOIN users u ON c.userid = u.id'
           );
         }
 
@@ -43,8 +53,14 @@ class CategoryController extends Controller
             "page"  => $numberPage
         ));
 
+        $viewList = $contentList->toArray();
+        for ($x = 0; $x <count($viewList); $x++){
+          $cat =$viewList[$x]["category"];
+          $viewList[$x]["catHtml"] = $this->_getCategoryHtml($cat);
+        }
+
         $this->view->page = $paginator->getPaginate();
-        $this->view->contentList = $contentList;
+        $this->view->contentList = $viewList;
         $this->view->config = $this->config;
     }
 

@@ -1,8 +1,18 @@
 <?php
 use Phalcon\Mvc\Controller;
 
+
 class ContentController extends Controller
 {
+
+  protected function _getCategoryHtml($category){
+    $arr = explode(",", $category);
+    $html = "";
+    foreach($arr as $c){
+      $html .=  "<strong><a href='categroy/search?cat=". $c ."'>" . $c . "</a></strong>,";
+    }
+    return substr($html, 0, -1);
+  }
 
   protected function checkSession(){
 
@@ -11,6 +21,8 @@ class ContentController extends Controller
           return $userID = $this->session->get("userid");
       } else {
           //redirect to category
+          header("Location: category");
+          exit();
       }
   }
 
@@ -32,6 +44,7 @@ class ContentController extends Controller
       }
       //render
       $this->view->content = $content->getFirst();
+      $this->view->catHtml = $this->_getCategoryHtml($content->getFirst()->category);
   }
 
   /**
@@ -97,7 +110,6 @@ class ContentController extends Controller
        $content->userid = $userID;
        $content->title = $this->request->getPost("title");
        $content->category = $this->request->getPost("category");
-       $content->date = date("Y-m-d h:i:sa");
        $content->updateDate = date("Y-m-d h:i:sa");
        $content->content = $this->request->getPost("content");
 

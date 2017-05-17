@@ -20,6 +20,12 @@ class Contents extends Model
 
     public $category;
 
+    public $catHtml;
+
+    public function setCatHtml($catHtml){
+        $this->catHtml = $catHtml;
+    }
+
     /**
      * This model is mapped to the table sample_cars
      */
@@ -27,5 +33,4 @@ class Contents extends Model
     {
         return "contents";
     }
-
 }

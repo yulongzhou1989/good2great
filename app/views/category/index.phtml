@@ -66,10 +66,10 @@
         <div class="col-lg-8">
           <div class="post-previews">
             <? foreach($contentList as $content): ?>
-              <h3><a href="content?id=<? echo $content->id ?>"><? echo $content->title  ?></a></h3>
-              <div class="category text-muted"><i class="icon-tag"></i> News</div>
-              <div class="author text-muted">by <? echo $content->username ?></div>
-              <div class="date text-muted"><i class="icon-clock"></i> <? echo $content->date ?></div>
+              <h3><a href="content?id=<? echo $content["id"] ?>"><? echo $content["title"]  ?></a></h3>
+              <div class="category text-muted"><i class="icon-tag"></i> <? echo $content["catHtml"] ?></div>
+              <div class="author text-muted">by <? echo $content["username"] ?></div>
+              <div class="date text-muted"><i class="icon-clock"></i> <? echo $content["date"] ?></div>
             <? endforeach?>
           </div>
           <ul class="pagination">
