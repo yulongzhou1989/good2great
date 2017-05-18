@@ -20,7 +20,7 @@ class CategoryController extends Controller
     public function indexAction()
     {
         $request = new Request();
-        $categoryID = $request->get("id");
+        $categoryID = $request->get("catID");
         $numberPage = $request->get("pageNum");
         if(!$numberPage){
           $numberPage = 1;
@@ -32,7 +32,7 @@ class CategoryController extends Controller
         if($categoryID){
           $contentList = $this->modelsManager->executeQuery(
             " SELECT c.id, u.username, c.date, c.title, c.category ".
-            " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE id like :id: ".
+            " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.category like :id: ".
             " LIMIT :limit: OFFSET :offset:",
             [
                 "id" => "%,".$categoryID.",%",
@@ -48,7 +48,7 @@ class CategoryController extends Controller
 
         //get category list
         $catList = $this->modelsManager->executeQuery(
-          " SELECT c.categoryName, c.categoryID, count(c.contentID) ".
+          " SELECT c.categoryName, c.categoryID, count(c.contentID) as num ".
           " FROM content_cat c GROUP BY c.categoryName"
         );
 

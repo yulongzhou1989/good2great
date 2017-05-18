@@ -25,6 +25,14 @@ class ContentController extends Controller
       }
   }
 
+  protected function getCatList(){
+    $catList = $this->modelsManager->executeQuery(
+      " SELECT c.categoryName, c.categoryID, count(c.contentID) as num ".
+      " FROM content_cat c GROUP BY c.categoryName"
+    );
+    return $catList;
+  }
+
   public function indexAction()
   {
       //checkSession();
@@ -45,6 +53,8 @@ class ContentController extends Controller
               "id" => $contentID,
           ]
         );
+
+        $catList = $this->getCatList();
       } else{
         header("Location: category");
         exit();
@@ -54,6 +64,7 @@ class ContentController extends Controller
       //render
       $this->view->content = $content->getFirst();
       $this->view->catHtml = $this->_getCategoryHtml($catList);
+      $this->view->catList = $catList;
   }
 
   /**
@@ -62,7 +73,9 @@ class ContentController extends Controller
    public function newAction()
    {
      $catDropdown =$this->_getCatDropdown();
+     $catList = $this->getCatList();
      $this->view->catDropdown = $catDropdown;
+     $this->view->catList = $catList;
    }
 
    protected function _getCatDropdown(){
@@ -87,11 +100,13 @@ class ContentController extends Controller
              "id" => $contentID,
          ]
        );
+       $catList = $this->getCatList();
      } else{
        header("Location: category");
        exit();
      }
      //render
+     $this->view->catList = $catList;
      $this->view->content = $content->getFirst();
    }
 
@@ -119,7 +134,7 @@ class ContentController extends Controller
           $this->_cont_catInsert($content->id, $catNames,$catIDs);
        }
 
-       $this->view->Message="success";
+       //redirect to new created page
    }
 
    protected function _cont_catInsert($contentID, $catNames, $catIDs){
@@ -172,7 +187,7 @@ class ContentController extends Controller
          $this->_cont_catInsert($contentID, $cats);
        }
 
-       $this->view->Message="success";
+       //redirect to content
    }
 
    /**
