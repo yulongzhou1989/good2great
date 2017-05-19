@@ -2,12 +2,12 @@
 
 use Phalcon\Mvc\Model;
 
-class Contents extends Model
+class content_cat extends Model
 {
-  public contentID;
+  public $contentID;
 
-  public categoryID;
+  public $categoryID;
 
-  public categoryName;
+  public $categoryName;
 
 }

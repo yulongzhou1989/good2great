@@ -31,8 +31,11 @@ class CategoryController extends Controller
         $contentList;
         if($categoryID){
           $contentList = $this->modelsManager->executeQuery(
-            " SELECT c.id, u.username, c.date, c.title, c.category ".
-            " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.category like :id: ".
+            " SELECT c.id, u.username, c.date, c.title, " .
+            " GROUP_CONCAT(cc.categoryID) AS categoryIDs, GROUP_CONCAT(cc.categoryName) AS categoryNames".
+            " FROM contents c LEFT JOIN content_cat cc ON cc.contentID = c.id " .
+            " LEFT JOIN users u ON c.userid = u.id  WHERE c.category like :id: ".
+            " GROUP BY c.id, c.date, c.title, u.username".
             " LIMIT :limit: OFFSET :offset:",
             [
                 "id" => "%,".$categoryID.",%",
@@ -42,20 +45,23 @@ class CategoryController extends Controller
           );
         } else{
           $contentList = $this->modelsManager->executeQuery(
-            'SELECT c.id, u.username, c.date, c.title, c.category FROM contents c LEFT JOIN users u ON c.userid = u.id'
+            " SELECT c.id, u.username, c.date, c.title," .
+            " GROUP_CONCAT(cc.categoryID) AS categoryIDs, GROUP_CONCAT(cc.categoryName) AS categoryNames".
+            " FROM contents c LEFT JOIN content_cat cc ON cc.contentID = c.id " .
+            " LEFT JOIN users u ON c.userid = u.id GROUP BY c.id, c.date, c.title, u.username"
           );
         }
 
         //get category list
         $catList = $this->modelsManager->executeQuery(
           " SELECT c.categoryName, c.categoryID, count(c.contentID) as num ".
-          " FROM content_cat c GROUP BY c.categoryName"
+          " FROM content_cat c GROUP BY c.categoryID, c.categoryName"
         );
 
         //get category tags html
         $viewList = $contentList->toArray();
         for ($x = 0; $x <count($viewList); $x++){
-          $cat =$viewList[$x]["category"];
+          $cat =$viewList[$x]["categoryNames"];
           $viewList[$x]["catHtml"] = $this->_getCategoryHtml($cat);
         }
 

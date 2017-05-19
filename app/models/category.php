@@ -3,8 +3,8 @@ use Phalcon\Mvc\Model;
 
 class Category extends Model
 {
-  public id;
+  public $id;
 
-  public categoryName;
-  
+  public $categoryName;
+
 }
