@@ -117,8 +117,8 @@ class ContentController extends Controller
    {
        //$userID = $this->checkSession();
        $content = new Content();
-       $catNames = $this->request->getPost("categoryNames");
-       $catIDs = $this->request->getPost("categoryIDs");
+      //  $catNames = $this->request->getPost("categoryNames");
+      //  $catIDs = $this->request->getPost("categoryIDs");
        $content->userid = $userID ;
        $content->title = $this->request->getPost("title");
        $content->category = $catNames;
@@ -140,16 +140,11 @@ class ContentController extends Controller
    protected function _cont_catInsert($contentID, $catNames, $catIDs){
          $insertCont_cat = "INSERT INTO content_cat (contentID, categoryID, categoryName) VALUES ";
          $catNameArr = explode("," , $catNames);
-         $catIDs = explode(",", $catIDs);
+         $catIDArr = explode(",", $catIDs);
          $insertValues = array();
-         for($x=0;$x<3*count($catArr);$x=$x+3){
-           $insertCont_cat .= "(?" . $x . ",?" . $x+1 .",?" . $x+2 . " ),"
-           array_push($insertValues, $contentID);
-           array_push($insertValues, $catIDs[$x]);
-           array_push($insertValues, $catNameArr[$x]);
-           array_push($insertValues, $contentID);
-           array_push($insertValues, $catIDs[$x+1]);
-           array_push($insertValues, $catNameArr[$x+1]);
+         for($x=0;$x<3*count($catIDArr);$x=$x+3){
+           $insertCont_cat .= "(?" . $x . ",?" . $x+1 .",?" . $x+2 . " ),";
+           array_push($insertValues, $contentID, $catIDArr[$x],$catNameArr[$x]);
          }
 
          $this->modelsManager->executeQuery(
@@ -161,7 +156,9 @@ class ContentController extends Controller
    protected function _cont_catDeleteByContentID($contentID){
         $this->modelsManager->executeQuery(
             "DELETE FROM content_cat WHERE contentID = :contentID:",
-            "contentID" => $contentID
+            [
+              "contentID" => $contentID
+            ]
         );
    }
 
