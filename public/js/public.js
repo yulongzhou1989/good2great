@@ -16,7 +16,7 @@ $("#contentEditButton").on("click", function(event){
     + '/good2great/content/edit?id=' + $("#contentID").val();
 });
 
-$("li[id^='catDropDown_']").on("click", function(event)){
+$("li[id^='catDropDown_']").on("click", function(event){
     var curCat = $(this).attr("catName");
     var curCatID =  $(this).attr("catID");
     if($("#categoryNames").val() == "") {
@@ -30,4 +30,4 @@ $("li[id^='catDropDown_']").on("click", function(event)){
     });
     $("#categoryNames").val($("#categoryNames").val() + "," + curCat);
     $("#categoryIDs").val($("#categoryNames").val() + "," + curCatID);
-}
+});

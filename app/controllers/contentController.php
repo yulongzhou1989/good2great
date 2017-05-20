@@ -28,7 +28,7 @@ class ContentController extends Controller
   protected function getCatList(){
     $catList = $this->modelsManager->executeQuery(
       " SELECT c.categoryName, c.categoryID, count(c.contentID) as num ".
-      " FROM content_cat c GROUP BY c.categoryName"
+      " FROM content_cat c GROUP BY c.categoryName, c.categoryID"
     );
     return $catList;
   }
@@ -39,7 +39,7 @@ class ContentController extends Controller
       $contentID = $this->request->get("id");
       if($contentID){
         $content = $this->modelsManager->executeQuery(
-          "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate, c.category" .
+          "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate" .
           " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
           [
               "id" => $contentID,
@@ -47,7 +47,7 @@ class ContentController extends Controller
         );
 
         $category = $this->modelsManager->executeQuery(
-          "SELECT c.categoryID, c.categoryTitle, c.contentID" .
+          "SELECT c.categoryID, c.categoryName, c.contentID" .
           " FROM content_cat c WHERE c.contentID = :id:",
           [
               "id" => $contentID,
@@ -80,7 +80,7 @@ class ContentController extends Controller
 
    protected function _getCatDropdown(){
        $cats = $this->modelsManager->executeQuery(
-         "SELECT id, categoryName FROM category"
+         "SELECT *  FROM category"
        ) ;
        return $cats;
    }
@@ -94,8 +94,11 @@ class ContentController extends Controller
      $contentID = $this->request->get("id");
      if($contentID){
        $content = $this->modelsManager->executeQuery(
-         "SELECT c.id, u.username, c.title, c.content, c.date, c.updateDate, c.category" .
-         " FROM contents c LEFT JOIN users u ON c.userid = u.id  WHERE c.id = :id:",
+         " SELECT c.id, u.username, c.date, c.title, c.content, " .
+         " GROUP_CONCAT(cc.categoryID) AS categoryIDs, GROUP_CONCAT(cc.categoryName) AS categoryNames".
+         " FROM contents c LEFT JOIN content_cat cc ON cc.contentID = c.id " .
+         " LEFT JOIN users u ON c.userid = u.id  WHERE c.id like :id: ".
+         " GROUP BY c.id, c.date, c.title, u.username",
          [
              "id" => $contentID,
          ]

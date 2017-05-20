@@ -7,4 +7,12 @@ class Category extends Model
 
   public $categoryName;
 
+  /**
+   * This model is mapped to the table sample_cars
+   */
+  public function getSource()
+  {
+      return "category";
+  }
+
 }
