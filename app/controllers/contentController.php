@@ -27,8 +27,8 @@ class ContentController extends Controller
 
   protected function getCatList(){
     $catList = $this->modelsManager->executeQuery(
-      " SELECT c.categoryName, c.categoryID, count(c.contentID) as num ".
-      " FROM content_cat c GROUP BY c.categoryName, c.categoryID"
+      "SELECT c.id, c.categoryName, COUNT(cc.categoryID) as num from category c " .
+      "LEFT JOIN content_cat cc on c.id = cc.categoryID GROUP BY  c.id, c.categoryName"
     );
     return $catList;
   }
@@ -80,7 +80,7 @@ class ContentController extends Controller
 
    protected function _getCatDropdown(){
        $cats = $this->modelsManager->executeQuery(
-         "SELECT *  FROM category"
+         "SELECT c.id, c.categoryName  FROM category c"
        ) ;
        return $cats;
    }
